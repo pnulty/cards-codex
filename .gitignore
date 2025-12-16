@@ -10,3 +10,6 @@ Final card deck edited proof.pdf*
 # Ignore spreadsheet sources that should not be public
 *.xls
 *.xlsx
+
+# Local database
+cards.db

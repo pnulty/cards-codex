@@ -4,12 +4,29 @@ const drawAllBtn = document.getElementById("draw-btn");
 const cardsContainer = document.getElementById("cards");
 const statusBox = document.getElementById("status");
 const cardTemplate = document.getElementById("card-template");
+const modeIndicator = document.getElementById("mode-indicator");
+const startSharedBtn = document.getElementById("start-shared-btn");
+const joinGameForm = document.getElementById("join-game-form");
+const joinGameInput = document.getElementById("join-game-input");
+const shareInfo = document.getElementById("share-info");
+const shareUrlInput = document.getElementById("share-url");
+const shareGameId = document.getElementById("share-game-id");
+const copyShareBtn = document.getElementById("copy-share");
 
 const suitNodes = new Map();
+let activeGameId = null;
+let pollHandle = null;
 
 const setStatus = (message, isError = false) => {
   statusBox.textContent = message;
   statusBox.classList.toggle("error", isError);
+};
+
+const setModeIndicator = (gameId) => {
+  if (!modeIndicator) {
+    return;
+  }
+  modeIndicator.textContent = gameId ? `Shared mode · ${gameId}` : "Solo mode";
 };
 
 const getSuitRank = (suit) => {
@@ -127,13 +144,117 @@ const populateCardContent = (suit, card) => {
 
 };
 
-const fetchCards = async (query = "") => {
-  const url = query ? `/api/draw?${query}` : "/api/draw";
-  const response = await fetch(url);
+const fetchJson = async (url, options) => {
+  const response = await fetch(url, options);
   if (!response.ok) {
-    throw new Error(`Server responded with ${response.status}`);
+    const message = await response.text().catch(() => "");
+    throw new Error(
+      `Server responded with ${response.status}${message ? `: ${message}` : ""}`
+    );
   }
   return response.json();
+};
+
+const createSharedGame = async () => fetchJson("/api/games", { method: "POST" });
+
+const fetchGame = async (gameId) => fetchJson(`/api/games/${gameId}`);
+
+const drawGame = async (gameId, suit) => {
+  const url = suit
+    ? `/api/games/${gameId}/draw?${new URLSearchParams({ suit }).toString()}`
+    : `/api/games/${gameId}/draw`;
+  return fetchJson(url, { method: "POST" });
+};
+
+const fetchSoloDraw = async (suit) => {
+  const url = suit
+    ? `/api/draw?${new URLSearchParams({ suit }).toString()}`
+    : "/api/draw";
+  return fetchJson(url);
+};
+
+const updateShareUi = (gameId) => {
+  if (!shareInfo || !shareUrlInput || !shareGameId) {
+    return;
+  }
+
+  if (!gameId) {
+    shareInfo.hidden = true;
+    shareUrlInput.value = "";
+    shareGameId.textContent = "";
+    return;
+  }
+
+  const shareUrl = `${window.location.origin}${window.location.pathname}#/game/${gameId}`;
+  shareInfo.hidden = false;
+  shareUrlInput.value = shareUrl;
+  shareGameId.textContent = gameId;
+};
+
+const stopPolling = () => {
+  if (pollHandle) {
+    window.clearInterval(pollHandle);
+    pollHandle = null;
+  }
+};
+
+const startPolling = (gameId) => {
+  stopPolling();
+  if (!gameId) {
+    return;
+  }
+
+  pollHandle = window.setInterval(async () => {
+    if (document.visibilityState === "hidden") {
+      return;
+    }
+
+    try {
+      const data = await fetchGame(gameId);
+      renderCards(data.cards ?? {});
+    } catch (error) {
+      console.error(error);
+    }
+  }, 4000);
+};
+
+const renderCards = (cards) => {
+  const suits = Object.keys(cards);
+  suits
+    .sort((a, b) => {
+      const rankDiff = getSuitRank(a) - getSuitRank(b);
+      return rankDiff !== 0 ? rankDiff : a.localeCompare(b);
+    })
+    .forEach((suit) => populateCardContent(suit, cards[suit]));
+};
+
+const parseGameIdFromHash = () => {
+  const hash = window.location.hash || "";
+  const match = hash.match(/^#\/game\/([^/?#]+)/i);
+  return match ? decodeURIComponent(match[1]) : null;
+};
+
+const enterSharedGame = async (gameId, initialCards = null) => {
+  activeGameId = gameId;
+  setModeIndicator(gameId);
+  updateShareUi(gameId);
+  startPolling(gameId);
+
+  try {
+    const cards = initialCards ?? (await fetchGame(gameId)).cards ?? {};
+    renderCards(cards);
+    setStatus("Shared game loaded. Anyone with the link can redraw suits.");
+  } catch (error) {
+    console.error(error);
+    setStatus(`Unable to load shared game: ${error.message}`, true);
+  }
+};
+
+const leaveSharedGame = () => {
+  activeGameId = null;
+  stopPolling();
+  setModeIndicator(null);
+  updateShareUi(null);
 };
 
 const drawSingleSuit = async (suit) => {
@@ -150,12 +271,13 @@ const drawSingleSuit = async (suit) => {
   const previousLabel = redrawBtn.textContent;
   redrawBtn.disabled = true;
   redrawBtn.textContent = "Drawing...";
-  setStatus(`Drawing ${suit} card...`);
+  setStatus(`Drawing ${suit} card...${activeGameId ? " (shared)" : ""}`);
 
   try {
-    const params = new URLSearchParams({ suit });
-    const data = await fetchCards(params.toString());
-    const card = data.cards[suit];
+    const data = activeGameId
+      ? await drawGame(activeGameId, suit)
+      : await fetchSoloDraw(suit);
+    const card = data.cards?.[suit];
     if (!card) {
       throw new Error("Server did not return a card for this suit.");
     }
@@ -171,18 +293,14 @@ const drawSingleSuit = async (suit) => {
 };
 
 const drawAllCards = async () => {
-  setStatus("Drawing cards...");
+  setStatus(activeGameId ? "Drawing shared cards..." : "Drawing cards...");
   drawAllBtn.disabled = true;
 
   try {
-    const data = await fetchCards();
-    const suits = Object.keys(data.cards);
-    suits
-      .sort((a, b) => {
-        const rankDiff = getSuitRank(a) - getSuitRank(b);
-        return rankDiff !== 0 ? rankDiff : a.localeCompare(b);
-      })
-      .forEach((suit) => populateCardContent(suit, data.cards[suit]));
+    const data = activeGameId
+      ? await drawGame(activeGameId)
+      : await fetchSoloDraw();
+    renderCards(data.cards ?? {});
     setStatus(
       "Click any card to reveal the full text or redraw an individual suit."
     );
@@ -195,4 +313,81 @@ const drawAllCards = async () => {
 };
 
 drawAllBtn.addEventListener("click", drawAllCards);
-window.addEventListener("DOMContentLoaded", drawAllCards);
+
+if (startSharedBtn) {
+  startSharedBtn.addEventListener("click", async () => {
+    startSharedBtn.disabled = true;
+    setStatus("Creating shared game...");
+    try {
+      const data = await createSharedGame();
+      const gameId = data.game_id;
+      if (!gameId) {
+        throw new Error("Server did not return a game id.");
+      }
+      window.location.hash = `#/game/${encodeURIComponent(gameId)}`;
+      await enterSharedGame(gameId, data.cards ?? {});
+      setStatus("Shared game created. Copy the link to share it.");
+    } catch (error) {
+      console.error(error);
+      setStatus(`Unable to start shared game: ${error.message}`, true);
+    } finally {
+      startSharedBtn.disabled = false;
+    }
+  });
+}
+
+if (joinGameForm && joinGameInput) {
+  joinGameForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const gameId = joinGameInput.value.trim();
+    if (!gameId) {
+      setStatus("Enter a game ID to join.", true);
+      return;
+    }
+
+    window.location.hash = `#/game/${encodeURIComponent(gameId)}`;
+    await enterSharedGame(gameId);
+  });
+}
+
+if (copyShareBtn && shareUrlInput) {
+  copyShareBtn.addEventListener("click", async () => {
+    const value = shareUrlInput.value;
+    if (!value) {
+      return;
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        shareUrlInput.focus();
+        shareUrlInput.select();
+        document.execCommand("copy");
+      }
+      setStatus("Share link copied.");
+    } catch (error) {
+      console.error(error);
+      setStatus("Unable to copy link. Select the field and copy manually.", true);
+    }
+  });
+}
+
+const syncFromLocation = async () => {
+  const gameId = parseGameIdFromHash();
+  if (!gameId) {
+    if (activeGameId) {
+      leaveSharedGame();
+    }
+    await drawAllCards();
+    return;
+  }
+
+  if (activeGameId === gameId) {
+    return;
+  }
+  await enterSharedGame(gameId);
+};
+
+window.addEventListener("hashchange", syncFromLocation);
+window.addEventListener("DOMContentLoaded", syncFromLocation);

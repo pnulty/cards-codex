@@ -17,8 +17,37 @@
             Review the short text for quick inspiration and click any card to reveal the full text.
           </p>
         </div>
-        <button id="draw-btn" class="primary">Draw New Cards</button>
+        <div class="hero-actions">
+          <button id="draw-btn" class="primary">Draw New Cards</button>
+          <p id="mode-indicator" class="mode-indicator">Solo mode</p>
+        </div>
       </header>
+
+      <section class="shared-panel">
+        <div class="shared-actions">
+          <button id="start-shared-btn" class="secondary">Start Shared Game</button>
+          <form id="join-game-form" class="join-form">
+            <label for="join-game-input" class="sr-only">Enter game ID</label>
+            <input
+              id="join-game-input"
+              type="text"
+              placeholder="Enter game ID"
+              autocomplete="off"
+            />
+            <button type="submit" class="secondary">Join</button>
+          </form>
+        </div>
+        <div id="share-info" class="share-info" hidden>
+          <p>Share this link so others can join your game:</p>
+          <div class="share-field">
+            <input id="share-url" readonly />
+            <button id="copy-share" class="secondary">Copy link</button>
+          </div>
+          <p class="game-id-display">
+            Game ID: <span id="share-game-id"></span>
+          </p>
+        </div>
+      </section>
 
       <section id="status" role="status" aria-live="polite"></section>
 
