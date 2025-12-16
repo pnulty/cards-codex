@@ -12,14 +12,45 @@ const shareInfo = document.getElementById("share-info");
 const shareUrlInput = document.getElementById("share-url");
 const shareGameId = document.getElementById("share-game-id");
 const copyShareBtn = document.getElementById("copy-share");
+const themeSelect = document.getElementById("theme-select");
 
 const suitNodes = new Map();
 let activeGameId = null;
 let pollHandle = null;
 
+const THEMES = new Set(["ember", "tufte", "parchment", "noir"]);
+const THEME_STORAGE_KEY = "cards-theme";
+
 const setStatus = (message, isError = false) => {
   statusBox.textContent = message;
   statusBox.classList.toggle("error", isError);
+};
+
+const applyTheme = (theme) => {
+  const selected = THEMES.has(theme) ? theme : "ember";
+  document.documentElement.dataset.theme = selected;
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, selected);
+  } catch (error) {
+    console.warn("Unable to persist theme selection.", error);
+  }
+  if (themeSelect) {
+    themeSelect.value = selected;
+  }
+};
+
+const initTheme = () => {
+  let stored = null;
+  try {
+    stored = localStorage.getItem(THEME_STORAGE_KEY);
+  } catch (error) {
+    stored = null;
+  }
+  applyTheme(stored || "ember");
+
+  if (themeSelect) {
+    themeSelect.addEventListener("change", () => applyTheme(themeSelect.value));
+  }
 };
 
 const clearCards = () => {
@@ -62,14 +93,14 @@ const showEmptySoloState = () => {
   renderEmptySuits();
   setModeIndicator(null);
   updateShareUi(null);
-  setStatus("Click “Draw New Cards” to begin.");
+  setStatus('Click "Draw New Cards" to begin.');
 };
 
 const setModeIndicator = (gameId) => {
   if (!modeIndicator) {
     return;
   }
-  modeIndicator.textContent = gameId ? `Shared mode · ${gameId}` : "Solo mode";
+  modeIndicator.textContent = gameId ? `Shared mode - ${gameId}` : "Solo mode";
 };
 
 const getSuitRank = (suit) => {
@@ -439,4 +470,7 @@ const syncFromLocation = async () => {
 };
 
 window.addEventListener("hashchange", syncFromLocation);
-window.addEventListener("DOMContentLoaded", syncFromLocation);
+window.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  syncFromLocation();
+});
