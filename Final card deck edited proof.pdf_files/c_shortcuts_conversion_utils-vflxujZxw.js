@@ -1,5 +1,0 @@
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="60454660-5a47-3c06-ada4-5c6c8af9adc2")}catch(e){}}();
-define(["exports","./c_shared_components_templates_modal_template","./e_ui_page_files_router"],(function(e,t,r){"use strict";e.convertToWebShortcutAndWait=async(e,a)=>{const c=new r.DefaultUserApiV2Client(e),{async_job_id:o}=await t.GetShortcutsRoutes(c).rpc("convert_to_web_shortcut",a,{});return await new Promise(((e,a)=>{const s=setInterval((async()=>{try{const n=await t.GetShortcutsRoutes(c).rpc("convert_to_web_shortcut/check",{async_job_id:o},{});switch(n[".tag"]){case"complete":clearInterval(s),e(n);break;case"failed":clearInterval(s),a(new Error(n.message));break;case"in_progress":break;case"other":clearInterval(s),a(new Error("An unexpected error occurred"));break;default:r.enforceExhaustive(n)}}catch(e){clearInterval(s),a(e)}}),1e3)}))}}));
-//# sourceMappingURL=c_shortcuts_conversion_utils.js-vflkg73gc.map
-
-//# debugId=60454660-5a47-3c06-ada4-5c6c8af9adc2

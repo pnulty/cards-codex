@@ -1,5 +1,0 @@
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="798a1f83-22b8-3e9b-ba77-3754e8da28ff")}catch(e){}}();
-define(["exports","react","./c_common_components_buttons","./e_ui_page_files_router"],(function(e,t,n,r){"use strict";function o(e){if(e&&e.__esModule)return e;var t=Object.create(null);return e&&Object.keys(e).forEach((function(n){if("default"!==n){var r=Object.getOwnPropertyDescriptor(e,n);Object.defineProperty(t,n,r.get?r:{enumerable:!0,get:function(){return e[n]}})}})),t.default=e,Object.freeze(t)}var c=o(t);const a=({props:e})=>c.createElement(n.HeaderIconButton,{onClick:e.onClick,"data-testid":"header-close-button"},c.createElement(r.UIIcon,{src:r.CloseLine,"aria-label":e.ariaLabel}));a.displayName="CloseButton",e.CloseButton=a}));
-//# sourceMappingURL=c_internals_components_close-button.js-vfl4ymrrZ.map
-
-//# debugId=798a1f83-22b8-3e9b-ba77-3754e8da28ff

@@ -1,0 +1,12 @@
+# Ignore local venvs and editor cruft
+.venv/
+__pycache__/
+*.pyc
+
+# Ignore deck export assets
+Final card deck edited proof.pdf
+Final card deck edited proof.pdf*
+
+# Ignore spreadsheet sources that should not be public
+*.xls
+*.xlsx

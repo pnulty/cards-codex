@@ -1,5 +1,0 @@
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="046e1928-4d21-3795-825c-1dd7549d749a")}catch(e){}}();
-define(["exports","./e_ui_page_files_router","react","./c_core_i18n","./e_core_exception","./c_src_sink_index","./c_action_bar_action_bar_constants","./c_pap-events_replay_shown_modal","./c_lodash-es_lodash","./c_pap-events_pdf_edit_select_replace_original_confirmation","metaserver/static/js/langpack","./c_bem","react-dom","./c_ncct_manual_assist_util","./c_core_notify","./e_edison","./c__rollupPluginBabelHelpers","./e_data_modules_stormcrow","./c_memoize-one","react/jsx-runtime","./c_security_csrf_hmac","./c_react-use_useEffectOnce","./c_chat_chat_constants"],(function(e,_,c,t,s,a,n,r,i,o,l,u,p,d,m,f,h,x,b,g,v,y,A){"use strict";class j extends _.ApiV2ClientBase{constructor(e){super(e,!0)}_headers(e){return{...e.headers}}}e.UnAuthedApiV2Client=j}));
-//# sourceMappingURL=c_api_v2_unauthed_client.js-vflM8EJX-.map
-
-//# debugId=046e1928-4d21-3795-825c-1dd7549d749a

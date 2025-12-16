@@ -1,5 +1,0 @@
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="f65aaf24-f481-3f53-b757-698f65d753e3")}catch(e){}}();
-define(["exports","react","./c_file_viewer_api_ui","./e_ui_page_files_router"],(function(e,t,u,i){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}var n=r(t);e.useExtractedText=function(e){var t;const r=i.usePreviewMetadataForPreviewKey(e),a=null===(t=i.useTextDataQuery(e,r).data)||void 0===t?void 0:t.apiData,[o,f]=i.usePreviewKeyAtom(u.textEncodingAtom,e),d=n.default.useMemo((()=>o||(a?(e=>{const t=new DataView(e);if(t.byteLength>=2){if(254===t.getUint8(0)&&255===t.getUint8(1))return"utf-16be";if(255===t.getUint8(0)&&254===t.getUint8(1))return"utf-16le"}return"utf-8"})(a):void 0)),[o,a]);return n.default.useEffect((()=>{void 0!==d&&o!==d&&f(d)}),[d,f,o]),n.default.useMemo((()=>{if(!e||!a||void 0===d)return;return new TextDecoder(d).decode(a)}),[d,a,e])}}));
-//# sourceMappingURL=c_file_viewer_hooks_useExtractedText.js-vflJMVFCY.map
-
-//# debugId=f65aaf24-f481-3f53-b757-698f65d753e3
