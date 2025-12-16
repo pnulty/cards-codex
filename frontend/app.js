@@ -22,6 +22,18 @@ const setStatus = (message, isError = false) => {
   statusBox.classList.toggle("error", isError);
 };
 
+const clearCards = () => {
+  suitNodes.clear();
+  cardsContainer.replaceChildren();
+};
+
+const showEmptySoloState = () => {
+  clearCards();
+  setModeIndicator(null);
+  updateShareUi(null);
+  setStatus("Click “Draw New Cards” to begin.");
+};
+
 const setModeIndicator = (gameId) => {
   if (!modeIndicator) {
     return;
@@ -253,8 +265,7 @@ const enterSharedGame = async (gameId, initialCards = null) => {
 const leaveSharedGame = () => {
   activeGameId = null;
   stopPolling();
-  setModeIndicator(null);
-  updateShareUi(null);
+  showEmptySoloState();
 };
 
 const drawSingleSuit = async (suit) => {
@@ -379,7 +390,7 @@ const syncFromLocation = async () => {
     if (activeGameId) {
       leaveSharedGame();
     }
-    await drawAllCards();
+    showEmptySoloState();
     return;
   }
 

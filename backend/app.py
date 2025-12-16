@@ -232,14 +232,13 @@ def draw_cards(suit: SuitQuery = None) -> DrawResponse:
 
 @app.post("/api/games", response_model=GameResponse)
 def create_game(session: Session = Depends(get_session)) -> GameResponse:
-    """Create a new shared game and pre-populate it with cards."""
+    """Create a new shared game."""
     game = Game()
     session.add(game)
     session.commit()
     session.refresh(game)
 
-    cards = _update_game_cards(session, game, list(cards_by_suit.keys()))
-    return GameResponse(game_id=game.id, cards=cards)
+    return GameResponse(game_id=game.id, cards={})
 
 
 @app.get("/api/games/{game_id}", response_model=GameResponse)
@@ -247,8 +246,6 @@ def get_game(game_id: str, session: Session = Depends(get_session)) -> GameRespo
     """Return the stored cards for a shared game."""
     game = _get_game_or_404(session, game_id)
     cards = _get_cards_for_game(session, game.id)
-    if not cards:
-        cards = _update_game_cards(session, game, list(cards_by_suit.keys()))
     return GameResponse(game_id=game.id, cards=cards)
 
 
