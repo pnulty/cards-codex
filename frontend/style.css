@@ -5,7 +5,7 @@
   font-size: 16px;
   --font-body: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: var(--font-body);
-  --app-max: 1100px;
+  --app-max: 1480px;
   --bg: #0d0d0d;
   --text: #f6f6f6;
   --muted: #a0aec0;
@@ -74,7 +74,7 @@
   color-scheme: light;
   --font-body: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-heading: var(--font-body);
-  --app-max: 1100px;
+  --app-max: 1400px;
   --bg: #f3efe4;
   --text: #1b1b1b;
   --muted: #5b5b5b;
@@ -103,7 +103,7 @@
   color-scheme: dark;
   --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: var(--font-body);
-  --app-max: 1100px;
+  --app-max: 1480px;
   --bg: #000000;
   --text: #ffffff;
   --muted: rgba(255, 255, 255, 0.7);
