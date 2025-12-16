@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Category 2 Card Draw</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Re:Enlightenment Cards</p>
+          <h1>Draw One Card per Suit</h1>
+          <p class="lede">
+            Each draw selects a random card from the five Category 2 suits.
+            Review the short text for quick inspiration and click any card to reveal the full text.
+          </p>
+        </div>
+        <button id="draw-btn" class="primary">Draw New Cards</button>
+      </header>
+
+      <section id="status" role="status" aria-live="polite"></section>
+
+      <section id="cards" class="cards-grid" aria-live="polite"></section>
+    </main>
+
+    <template id="card-template">
+      <article class="card" tabindex="0">
+        <div class="card-header">
+          <div class="card-suit"></div>
+          <h2 class="card-name"></h2>
+        </div>
+        <p class="card-short"></p>
+        <div class="card-full" hidden></div>
+        <p class="card-url"></p>
+        <div class="card-actions">
+          <button type="button" class="card-redraw secondary">
+            Draw this suit
+          </button>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="/assets/app.js"></script>
+  </body>
+</html>

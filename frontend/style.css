@@ -1,0 +1,203 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #f6f6f6;
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 4vw, 3rem) 4rem;
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  font-size: 0.75rem;
+  color: #8ecae6;
+  margin: 0 0 0.5rem 0;
+}
+
+.lede {
+  margin: 0;
+  max-width: 55ch;
+  color: #d9d9d9;
+}
+
+.primary {
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff6b6b, #fcb045);
+  color: #0d0d0d;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.primary:not(:disabled):hover,
+.primary:not(:disabled):focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.secondary {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: transparent;
+  color: #f6f6f6;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.secondary:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.secondary:not(:disabled):hover,
+.secondary:not(:disabled):focus-visible {
+  border-color: #fcb045;
+  background: rgba(252, 176, 69, 0.1);
+}
+
+#status {
+  min-height: 1.5rem;
+  font-style: italic;
+  color: #a0aec0;
+  margin-bottom: 1rem;
+}
+
+#status.error {
+  color: #ff6b6b;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.35);
+}
+
+.card:focus-visible {
+  outline: 2px solid #fcb045;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.card-suit {
+  font-size: 0.9rem;
+  letter-spacing: 0.16rem;
+  color: #fcb045;
+  text-transform: uppercase;
+}
+
+.card-name {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.card-short {
+  margin: 0;
+  color: #e5e5e5;
+}
+
+.card-full {
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d6d6d6;
+}
+
+.card.expanded {
+  border-color: #fcb045;
+}
+
+.card.expanded .card-full {
+  display: block;
+}
+
+.card-url {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.card-url a {
+  color: #8ecae6;
+  text-decoration: none;
+}
+
+.card-url a:hover {
+  text-decoration: underline;
+}
+
+.card-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card {
+    cursor: default;
+  }
+}

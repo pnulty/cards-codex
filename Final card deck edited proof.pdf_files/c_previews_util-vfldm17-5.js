@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="faaeadd8-7025-38a9-af0c-518c1aecf4bd")}catch(e){}}();
+define(["exports","./e_ui_page_files_router","./c_bem"],(function(e,i,r){"use strict";function t(e,t){return function(e,r){const t={};return t[i.UID_PARAM_NAME]=String(r),e.updateQuery(t)}(new r.URI({path:"/history"+e}),t.id)}const o=[i.PreviewType.Archive,i.PreviewType.Audio,i.PreviewType.CloudDoc,i.PreviewType.Excel,i.PreviewType.Text,i.PreviewType.Image,i.PreviewType.Linkfile,i.PreviewType.Other,i.PreviewType.SsrDoc,i.PreviewType.RawHTML,i.PreviewType.Restricted,i.PreviewType.Video,i.PreviewType.Doc,i.PreviewType.Photo];e.VALID_PREVIEW_TYPES=o,e.redirectToVersionHistory=function(e,r){i.UserActivityLogger.log("web","view_version_history");const o=t(e,r);i.redirect(o.toString())}}));
+//# sourceMappingURL=c_previews_util.js-vflMhoMQM.map
+
+//# debugId=faaeadd8-7025-38a9-af0c-518c1aecf4bd

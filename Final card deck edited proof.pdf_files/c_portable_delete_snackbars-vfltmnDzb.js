@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="4816c3a5-8d03-32c6-b758-a72ed4798126")}catch(e){}}();
+define(["exports","./c_files_view_file_actions_snackbars","./e_ui_page_files_router"],(function(e,r,t){"use strict";var a;e.EntryPoint=void 0,(a=e.EntryPoint||(e.EntryPoint={})).PHOTOS="PHOTOS",a.PREVIEWS="PREVIEWS";const n=(e,a=1)=>t.Snackbar.sync(r.deleteInProgress(a),!1,e),o=(e,a=1)=>t.Snackbar.complete(r.deleteCompleteSuccess(a,a),e),c=(e,a,n=1)=>{e.error&&t.Snackbar.fail(r.deleteError(n,e.error),a)};var l=Object.freeze({__proto__:null,deleteCompleteSnackBar:o,deleteFailedSnackBar:c,deleteSnackBarInProgress:n});e.deleteCompleteSnackBar=o,e.deleteFailedSnackBar=c,e.deleteSnackBarInProgress=n,e.imageEditorInitialActionStrings=["rotateLeft","rotateRight","flip","crop","adjust","upscale","colorCorrect","filter"],e.snackbars_esnext=l}));
+//# sourceMappingURL=c_portable_delete_snackbars.js-vflAmZkw9.map
+
+//# debugId=4816c3a5-8d03-32c6-b758-a72ed4798126

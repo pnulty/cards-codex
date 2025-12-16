@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="565c7878-a169-33f9-86a3-d0a88d3b34d4")}catch(e){}}();
+define(["exports","./e_ui_page_files_router","./c_pap-events_replay_shown_modal"],(function(e,t,r){"use strict";function n(e){return e.formatMessage({id:"rIir19",defaultMessage:"Dropbox"})}function o(e,r,n){return n===t.ROLE_WORK?r.team_name:r.is_paired?function(e){return e.formatMessage({id:"QPBzI3",defaultMessage:"Personal"})}(e):""}function a(e,t,r){return o(e,t,r.role)}function u(e,t,r){return a(e,t,r)||n(e)}e.deprecatedGetRoleTitle=function(e,t,r){return a(e,t,r)},e.deprecatedGetRootName=function(e,t,r){return u(e,t,r)},e.deprecatedGetRootNameByRole=function(e,t,r){return o(e,t,r)||n(e)},e.getRootNameWithCorrectTeamName=u}));
+//# sourceMappingURL=c_viewer_helpers.js-vflPL6AET.map
+
+//# debugId=565c7878-a169-33f9-86a3-d0a88d3b34d4

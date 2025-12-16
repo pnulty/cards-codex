@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="9ea874c7-4bcf-3619-850e-2696e02352f6")}catch(e){}}();
+define(["exports","./c_bem","./e_ui_page_files_router","./c_core_notify","./c_core_i18n","./c_pap-events_replay_shown_modal"],(function(e,i,t,_,r,n){"use strict";e.getObjectIdentifier=e=>{if(e.is_dir){if(e.target_ns)return{".tag":"shared_folder",sharedFolderId:String(e.target_ns),fileId:e.file_id};{let i="";return i=e.ns_id&&e.ns_path?`ns:${e.ns_id}${e.ns_path}`:e.fq_path,{".tag":"file_folder",name:e.ns_path.split("/").pop()||"",path:i,fileId:e.file_id}}}return{".tag":"file",fileId:e.file_id}}}));
+//# sourceMappingURL=c_sharing_common_utils.js-vflq5CHcF.map
+
+//# debugId=9ea874c7-4bcf-3619-850e-2696e02352f6

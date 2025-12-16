@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="18b2737f-bc2b-32f6-ad72-a45a66e6d08a")}catch(e){}}();
+define(["exports","react"],(function(e,t){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var o=n(t);let r;const s=window.currentBugScopes;s?r=s:window.currentBugScopes=r={nextId:0,scopes:{}};const u=({jiraComponent:e,displayName:n,children:s})=>(t.useEffect((()=>{const t=function(e,t){const n=r.nextId;return r.nextId++,r.scopes[n]={jiraComponent:e,displayName:t},n}(e,n);return()=>{return e=t,void delete r.scopes[e];var e}}),[e,n]),o.default.createElement(o.default.Fragment,null,s));u.displayName="RegisterComponentWithBugReporter",e.RegisterComponentWithBugReporter=u,e.getBugScopes=function(){return Object.values(r.scopes)}}));
+//# sourceMappingURL=c_bug_reporting_routing.js-vflO6QtyF.map
+
+//# debugId=18b2737f-bc2b-32f6-ad72-a45a66e6d08a

@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="65e1e1bf-9952-3a70-b590-f5d823ba22e1")}catch(e){}}();
+define(["exports","react","./e_ui_page_files_router"],(function(e,n,r){"use strict";e.useRafCallback=function(e){var t=r.useSyncedRef(e),u=n.useRef(0),a=n.useCallback((function(){r.isBrowser&&u.current&&(cancelAnimationFrame(u.current),u.current=0)}),[]);return r.useUnmountEffect(a),[n.useMemo((function(){var n=function(){for(var e=[],n=0;n<arguments.length;n++)e[n]=arguments[n];r.isBrowser&&(a(),u.current=requestAnimationFrame((function(){t.current.apply(t,e),u.current=0})))};return Object.defineProperties(n,{length:{value:e.length},name:{value:"".concat(e.name||"anonymous","__raf")}}),n}),[]),a]}}));
+//# sourceMappingURL=c_react-hookz_web_useRafCallback.js-vfll7MN8k.map
+
+//# debugId=65e1e1bf-9952-3a70-b590-f5d823ba22e1

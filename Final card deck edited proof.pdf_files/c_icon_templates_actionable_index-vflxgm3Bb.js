@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="bd44295d-ca7a-3bf5-b208-3fc0f95317fe")}catch(e){}}();
+define(["exports","react","./e_ui_page_files_router","./c_spectrum_svg_icon_bundle"],(function(e,t,n,a){"use strict";function c(e){if(e&&e.__esModule)return e;var t=Object.create(null);return e&&Object.keys(e).forEach((function(n){if("default"!==n){var a=Object.getOwnPropertyDescriptor(e,n);Object.defineProperty(t,n,a.get?a:{enumerable:!0,get:function(){return e[n]}})}})),t.default=e,Object.freeze(t)}var r=c(t);const o=({className:e,icon:t,name:c,disabled:o=!1,role:l="img",...i})=>{const s=n.cx(a.getClassNamesForName("actionable",c),{"mc-icon-template-actionable-disabled":o},e);return r.cloneElement(t,{className:s,role:l,...i})};o.displayName="Component",o.displayName="IconTemplateActionable",e.Component=o}));
+//# sourceMappingURL=c_icon_templates_actionable_index.js-vflcEonN8.map
+
+//# debugId=bd44295d-ca7a-3bf5-b208-3fc0f95317fe

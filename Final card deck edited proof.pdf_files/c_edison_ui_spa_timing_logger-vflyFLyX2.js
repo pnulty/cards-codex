@@ -1,0 +1,5 @@
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="976fbcbc-fca4-38d6-9bde-0af0a2aa5266")}catch(e){}}();
+define(["exports","./e_ui_page_files_router"],(function(e,t){"use strict";const i=()=>null!==t.time_to_interactive(),r=e=>{const r=i()||e;return{usingSpaTimer:r,timer:r?t.get_timer("files_spa_timer"):t.get_timer()}};e.isClientSideNavigation=i,e.markApplicationStart=e=>{const{usingSpaTimer:t,timer:i}=r(e);t||i.applicationStart()},e.markFetchedDataRequiredForTTI=e=>{const{usingSpaTimer:t,timer:i}=r(e);t||i.fetchedDataRequiredForTTI()},e.markTimeToInteractive=e=>{const{usingSpaTimer:t,timer:i}=r(e);i.markTimeToInteractive(),t&&i.end()}}));
+//# sourceMappingURL=c_edison_ui_spa_timing_logger.js-vflQvARGh.map
+
+//# debugId=976fbcbc-fca4-38d6-9bde-0af0a2aa5266

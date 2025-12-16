@@ -1,0 +1,12 @@
+/**
+ * NOTE: This file should only be imported for the BUILD config of the ccpa-iframe
+ * to be used for the embedded iframe version.
+ */
+html.maestro {
+    display: inline;
+    background-color: transparent !important;
+}
+
+body {
+    background-color: transparent !important;
+}
