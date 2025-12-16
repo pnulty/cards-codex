@@ -27,8 +27,39 @@ const clearCards = () => {
   cardsContainer.replaceChildren();
 };
 
+const populateEmptySuit = (suit) => {
+  const node = suitNodes.get(suit) ?? createCardNode(suit);
+  const suitEl = node.querySelector(".card-suit");
+  const nameEl = node.querySelector(".card-name");
+  const shortEl = node.querySelector(".card-short");
+  const fullEl = node.querySelector(".card-full");
+  const urlEl = node.querySelector(".card-url");
+  const redrawBtn = node.querySelector(".card-redraw");
+
+  node.dataset.suit = suit;
+  node.classList.remove("expanded");
+
+  if (suitEl) suitEl.textContent = suit;
+  if (nameEl) nameEl.textContent = "Not drawn yet";
+  if (shortEl) shortEl.textContent = "Use the button below to draw a card.";
+  if (fullEl) {
+    fullEl.textContent = "";
+    fullEl.hidden = true;
+  }
+  if (urlEl) urlEl.textContent = "";
+  if (redrawBtn) {
+    redrawBtn.textContent = `Draw ${suit} card`;
+    redrawBtn.dataset.suit = suit;
+  }
+};
+
+const renderEmptySuits = () => {
+  SUIT_ORDER.forEach((suit) => populateEmptySuit(suit));
+};
+
 const showEmptySoloState = () => {
   clearCards();
+  renderEmptySuits();
   setModeIndicator(null);
   updateShareUi(null);
   setStatus("Click “Draw New Cards” to begin.");
@@ -130,6 +161,7 @@ const updateUrlElement = (urlEl, url) => {
 
 const populateCardContent = (suit, card) => {
   const node = suitNodes.get(suit) ?? createCardNode(suit);
+  const isExpanded = node.classList.contains("expanded");
   const suitEl = node.querySelector(".card-suit");
   const nameEl = node.querySelector(".card-name");
   const shortEl = node.querySelector(".card-short");
@@ -138,14 +170,13 @@ const populateCardContent = (suit, card) => {
   const redrawBtn = node.querySelector(".card-redraw");
 
   node.dataset.suit = suit;
-  node.classList.remove("expanded");
 
   if (suitEl) suitEl.textContent = suit;
   if (nameEl) nameEl.textContent = card.name;
   if (shortEl) shortEl.textContent = card.short_text;
   if (fullEl) {
     fullEl.textContent = card.text;
-    fullEl.hidden = true;
+    fullEl.hidden = !isExpanded;
   }
   updateUrlElement(urlEl, card.url);
 
@@ -231,13 +262,20 @@ const startPolling = (gameId) => {
 };
 
 const renderCards = (cards) => {
-  const suits = Object.keys(cards);
-  suits
+  const suits = new Set([...SUIT_ORDER, ...Object.keys(cards ?? {})]);
+  Array.from(suits)
     .sort((a, b) => {
       const rankDiff = getSuitRank(a) - getSuitRank(b);
       return rankDiff !== 0 ? rankDiff : a.localeCompare(b);
     })
-    .forEach((suit) => populateCardContent(suit, cards[suit]));
+    .forEach((suit) => {
+      const card = cards?.[suit];
+      if (card) {
+        populateCardContent(suit, card);
+      } else {
+        populateEmptySuit(suit);
+      }
+    });
 };
 
 const parseGameIdFromHash = () => {
