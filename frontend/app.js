@@ -65,6 +65,7 @@ const populateEmptySuit = (suit) => {
   const shortEl = node.querySelector(".card-short");
   const fullEl = node.querySelector(".card-full");
   const urlEl = node.querySelector(".card-url");
+  const toggleBtn = node.querySelector(".card-toggle");
   const redrawBtn = node.querySelector(".card-redraw");
 
   node.dataset.suit = suit;
@@ -77,11 +78,15 @@ const populateEmptySuit = (suit) => {
     fullEl.textContent = "";
     fullEl.hidden = true;
   }
+  if (toggleBtn) {
+    toggleBtn.disabled = true;
+  }
   if (urlEl) urlEl.textContent = "";
   if (redrawBtn) {
     redrawBtn.textContent = `Draw ${suit} card`;
     redrawBtn.dataset.suit = suit;
   }
+  updateToggleButton(node, false);
 };
 
 const renderEmptySuits = () => {
@@ -133,6 +138,16 @@ const toggleCard = (cardEl) => {
   }
   const expanded = cardEl.classList.toggle("expanded");
   fullTextEl.hidden = !expanded;
+  updateToggleButton(cardEl, expanded);
+};
+
+const updateToggleButton = (cardEl, expanded) => {
+  const toggleBtn = cardEl.querySelector(".card-toggle");
+  if (!toggleBtn) {
+    return;
+  }
+  toggleBtn.textContent = expanded ? "Fold away" : "Peel back";
+  toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
 };
 
 const createToggleHandler = (node) => (event) => {
@@ -158,6 +173,14 @@ const createCardNode = (suit) => {
   const handleToggle = createToggleHandler(node);
   node.addEventListener("click", handleToggle);
   node.addEventListener("keydown", handleToggle);
+
+  const toggleBtn = node.querySelector(".card-toggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleCard(node);
+    });
+  }
 
   const redrawBtn = node.querySelector(".card-redraw");
   if (redrawBtn) {
@@ -198,6 +221,7 @@ const populateCardContent = (suit, card) => {
   const shortEl = node.querySelector(".card-short");
   const fullEl = node.querySelector(".card-full");
   const urlEl = node.querySelector(".card-url");
+  const toggleBtn = node.querySelector(".card-toggle");
   const redrawBtn = node.querySelector(".card-redraw");
 
   node.dataset.suit = suit;
@@ -209,6 +233,10 @@ const populateCardContent = (suit, card) => {
     fullEl.textContent = card.text;
     fullEl.hidden = !isExpanded;
   }
+  if (toggleBtn) {
+    toggleBtn.disabled = false;
+  }
+  updateToggleButton(node, isExpanded);
   updateUrlElement(urlEl, card.url);
 
   if (redrawBtn) {
@@ -362,7 +390,7 @@ const drawSingleSuit = async (suit) => {
       throw new Error("Server did not return a card for this suit.");
     }
     populateCardContent(suit, card);
-    setStatus(`Updated ${suit}. Click the card to reveal full text.`);
+    setStatus(`Updated ${suit}. Click the card or use "Peel back" for full text.`);
   } catch (error) {
     console.error(error);
     setStatus(`Unable to draw ${suit} card: ${error.message}`, true);
@@ -382,7 +410,7 @@ const drawAllCards = async () => {
       : await fetchSoloDraw();
     renderCards(data.cards ?? {});
     setStatus(
-      "Click any card to reveal the full text or redraw an individual suit."
+      'Click any card or use "Peel back" to reveal full text, or redraw an individual suit.'
     );
   } catch (error) {
     console.error(error);

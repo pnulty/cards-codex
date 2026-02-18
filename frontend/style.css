@@ -405,6 +405,9 @@ body {
   padding-top: 0.5rem;
   border-top: 1px solid var(--border);
   color: var(--text-softer);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .card.expanded {
@@ -413,6 +416,8 @@ body {
 
 .card.expanded .card-full {
   display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .card-url {
@@ -432,7 +437,18 @@ body {
 .card-actions {
   margin-top: auto;
   display: flex;
+  gap: 0.5rem;
   justify-content: flex-end;
+}
+
+.card-toggle {
+  border-style: dashed;
+  opacity: 0.88;
+}
+
+.card-toggle:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 @media (max-width: 600px) {
