@@ -15,22 +15,17 @@ Open http://127.0.0.1:8000 to use the web UI. The `/api/draw` endpoint returns J
 
 ## Card Data Source
 
-By default, the app loads cards from the local `cards.tsv` file.
+The app loads cards from a hard-coded Google Sheets CSV export URL.
 
-To load cards from Google Sheets instead, publish the sheet and set `CARDS_DATA_URL` to the sheet's CSV export URL, for example:
+If Google Sheets is unavailable at startup, the app falls back to the local `cards.tsv` file.
+
+The current sheet is:
 
 ```bash
-export CARDS_DATA_URL="https://docs.google.com/spreadsheets/d/<sheet-id>/export?format=csv&gid=<gid>"
-uvicorn backend.app:app --reload
+https://docs.google.com/spreadsheets/d/13ZuEqXz3gGgovGVP-714SsFIYh0He_e-jSVIg82A-zU/export?format=csv&gid=0
 ```
 
 The sheet should expose the same headers as `cards.tsv`: `Category2`, `Name`, `Text`, `ShortText`, and `URL`.
-
-If your remote source is tab-separated instead of CSV, also set:
-
-```bash
-export CARDS_DATA_FORMAT=tsv
-```
 
 ## Shared Games
 
@@ -50,6 +45,5 @@ Shared games are persisted in a small database (`cards.db` via SQLite by default
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `uvicorn backend.app:app --host 0.0.0.0 --port $PORT`
 4. Select the Python environment (Render automatically detects it via `requirements.txt`).
-5. If you want Render to use Google Sheets as the card source, add `CARDS_DATA_URL` in the service environment settings using the sheet's published CSV export URL.
 
 Render will expose the FastAPI service at the generated URL, serving both the API and the static frontend.

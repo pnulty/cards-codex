@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import csv
 import io
-import os
 import random
 from contextlib import closing
 from datetime import datetime
@@ -26,8 +25,10 @@ from backend.models import Game, GameCard
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT_DIR / "cards.tsv"
 FRONTEND_DIR = ROOT_DIR / "frontend"
-CARDS_DATA_URL = os.getenv("CARDS_DATA_URL", "").strip()
-CARDS_DATA_FORMAT = os.getenv("CARDS_DATA_FORMAT", "").strip().lower()
+GOOGLE_SHEETS_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "13ZuEqXz3gGgovGVP-714SsFIYh0He_e-jSVIg82A-zU/export?format=csv&gid=0"
+)
 
 
 class Card(BaseModel):
@@ -62,18 +63,14 @@ def _build_short_text(text: str, short_text: Optional[str], limit: int = 190) ->
 
 
 def _iter_card_rows() -> Iterable[dict[str, str]]:
-    """Yield card rows from either a remote export URL or the local TSV file."""
-    if CARDS_DATA_URL:
-        try:
-            with closing(urlopen(CARDS_DATA_URL, timeout=10)) as response:
-                payload = response.read().decode("utf-8-sig")
-        except URLError as exc:
-            raise RuntimeError(
-                f"Unable to load card data from CARDS_DATA_URL: {exc}"
-            ) from exc
-
-        delimiter = "\t" if CARDS_DATA_FORMAT == "tsv" else ","
-        yield from csv.DictReader(io.StringIO(payload), delimiter=delimiter)
+    """Yield card rows from Google Sheets, falling back to the local TSV file."""
+    try:
+        with closing(urlopen(GOOGLE_SHEETS_CSV_URL, timeout=10)) as response:
+            payload = response.read().decode("utf-8-sig")
+    except URLError:
+        payload = None
+    else:
+        yield from csv.DictReader(io.StringIO(payload), delimiter=",")
         return
 
     if not DATA_FILE.exists():
