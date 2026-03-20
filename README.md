@@ -29,6 +29,8 @@ The sheet should expose the same headers as `cards.tsv`: `Category2`, `Name`, `T
 
 When `ImageURL` is present, cards can be flipped in the UI to reveal the image.
 
+If you want to keep images in this repo, place them under `frontend/assets/images/cards/` and use paths like `/assets/images/cards/example.jpg` in the sheet's `ImageURL` column.
+
 ## Shared Games
 
 Use shared games when you want multiple people to see the same set of cards:
