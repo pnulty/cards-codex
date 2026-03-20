@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import csv
+import io
+import os
 import random
+from contextlib import closing
 from datetime import datetime
 from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional
+from urllib.error import URLError
+from urllib.request import urlopen
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,6 +26,8 @@ from backend.models import Game, GameCard
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT_DIR / "cards.tsv"
 FRONTEND_DIR = ROOT_DIR / "frontend"
+CARDS_DATA_URL = os.getenv("CARDS_DATA_URL", "").strip()
+CARDS_DATA_FORMAT = os.getenv("CARDS_DATA_FORMAT", "").strip().lower()
 
 
 class Card(BaseModel):
@@ -54,33 +61,50 @@ def _build_short_text(text: str, short_text: Optional[str], limit: int = 190) ->
     return f"{truncated}..."
 
 
-def load_cards() -> Dict[str, List[Card]]:
-    """Read cards from the TSV file and bucket them by suit."""
+def _iter_card_rows() -> Iterable[dict[str, str]]:
+    """Yield card rows from either a remote export URL or the local TSV file."""
+    if CARDS_DATA_URL:
+        try:
+            with closing(urlopen(CARDS_DATA_URL, timeout=10)) as response:
+                payload = response.read().decode("utf-8-sig")
+        except URLError as exc:
+            raise RuntimeError(
+                f"Unable to load card data from CARDS_DATA_URL: {exc}"
+            ) from exc
+
+        delimiter = "\t" if CARDS_DATA_FORMAT == "tsv" else ","
+        yield from csv.DictReader(io.StringIO(payload), delimiter=delimiter)
+        return
+
     if not DATA_FILE.exists():
         raise FileNotFoundError(f"Cannot locate data file at {DATA_FILE}")
 
-    suits: Dict[str, List[Card]] = {}
     with DATA_FILE.open(encoding="utf-8") as data_file:
-        reader = csv.DictReader(data_file, delimiter="\t")
-        for idx, row in enumerate(reader):
-            suit = row.get("Category2", "").strip()
-            name = row.get("Name", "").strip()
-            text = row.get("Text", "").strip()
-            short_text = row.get("ShortText", "").strip()
-            url = row.get("URL", "").strip() or None
+        yield from csv.DictReader(data_file, delimiter="\t")
 
-            if not suit or not name or not text:
-                continue
 
-            card = Card(
-                id=str(idx),
-                suit=suit,
-                name=name,
-                text=text,
-                short_text=_build_short_text(text, short_text),
-                url=url,
-            )
-            suits.setdefault(suit, []).append(card)
+def load_cards() -> Dict[str, List[Card]]:
+    """Read cards from the configured source and bucket them by suit."""
+    suits: Dict[str, List[Card]] = {}
+    for idx, row in enumerate(_iter_card_rows()):
+        suit = row.get("Category2", "").strip()
+        name = row.get("Name", "").strip()
+        text = row.get("Text", "").strip()
+        short_text = row.get("ShortText", "").strip()
+        url = row.get("URL", "").strip() or None
+
+        if not suit or not name or not text:
+            continue
+
+        card = Card(
+            id=str(idx),
+            suit=suit,
+            name=name,
+            text=text,
+            short_text=_build_short_text(text, short_text),
+            url=url,
+        )
+        suits.setdefault(suit, []).append(card)
 
     if not suits:
         raise RuntimeError("No cards were loaded from the data file.")

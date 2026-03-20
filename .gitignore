@@ -1,5 +1,7 @@
 # Ignore local venvs and editor cruft
 .venv/
+.venv-linux/
+.deps/
 __pycache__/
 *.pyc
 
@@ -10,6 +12,7 @@ Final card deck edited proof.pdf*
 # Ignore spreadsheet sources that should not be public
 *.xls
 *.xlsx
+cards.tev
 
 # Local database
 cards.db
