@@ -31,7 +31,7 @@ Use `CardID` for a stable per-card identifier. If it is missing, the app falls b
 
 When `ImageURL` is present, cards can be flipped in the UI to reveal the image.
 
-If you want to keep images in this repo, place them under `frontend/assets/images/cards/` and use paths like `/assets/images/cards/example.jpg` in the sheet's `ImageURL` column.
+If you want to keep images in this repo, place them under `frontend/images/cards/` and use paths like `/assets/images/cards/example.jpg` in the sheet's `ImageURL` column.
 
 ## Shared Games
 

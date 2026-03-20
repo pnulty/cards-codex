@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent
 PPTX_PATH = ROOT_DIR / "Final card deck edited proof pictures.pptx"
 TSV_PATH = ROOT_DIR / "cards.tsv"
-OUTPUT_DIR = ROOT_DIR / "frontend" / "assets" / "images" / "cards"
+OUTPUT_DIR = ROOT_DIR / "frontend" / "images" / "cards"
 MANIFEST_PATH = ROOT_DIR / "card_image_manifest.csv"
 
 XML_NAMESPACES = {
