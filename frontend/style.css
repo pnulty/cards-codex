@@ -517,11 +517,21 @@ body {
 }
 
 .card-actions {
-  margin-top: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: flex-end;
+}
+
+.card-actions-top {
+  margin-top: 0.1rem;
+  justify-content: flex-start;
+}
+
+.card-actions-bottom {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
 
 .card-text-toggle {

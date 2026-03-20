@@ -71,10 +71,15 @@
               <div class="card-suit"></div>
               <h2 class="card-name"></h2>
             </div>
+            <div class="card-actions card-actions-top">
+              <button type="button" class="card-redraw-front secondary">
+                Draw this suit
+              </button>
+            </div>
             <p class="card-short"></p>
             <div class="card-full" hidden></div>
             <p class="card-url"></p>
-            <div class="card-actions">
+            <div class="card-actions card-actions-bottom">
               <button
                 type="button"
                 class="card-text-toggle secondary"
@@ -84,9 +89,6 @@
               </button>
               <button type="button" class="card-flip-front secondary">
                 Flip to image
-              </button>
-              <button type="button" class="card-redraw-front secondary">
-                Draw this suit
               </button>
             </div>
           </section>
@@ -99,7 +101,7 @@
               <img class="card-image" alt="" hidden />
               <p class="card-image-empty" hidden>No image available for this card yet.</p>
             </div>
-            <div class="card-actions">
+            <div class="card-actions card-actions-bottom">
               <button type="button" class="card-flip-back secondary">
                 Return to text
               </button>
