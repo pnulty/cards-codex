@@ -49,6 +49,11 @@ class GameResponse(BaseModel):
     cards: Dict[str, Card]
 
 
+class ReloadResponse(BaseModel):
+    status: str
+    suits: List[str]
+
+
 def _build_short_text(text: str, short_text: Optional[str], limit: int = 190) -> str:
     """Return a short summary, preferring the provided ShortText field."""
     if short_text:
@@ -111,6 +116,19 @@ def load_cards() -> Dict[str, List[Card]]:
 
 cards_by_suit = load_cards()
 suit_lookup = {suit.lower(): suit for suit in cards_by_suit}
+
+
+def _replace_cards_cache(new_cards_by_suit: Dict[str, List[Card]]) -> None:
+    global cards_by_suit, suit_lookup
+    cards_by_suit = new_cards_by_suit
+    suit_lookup = {suit.lower(): suit for suit in cards_by_suit}
+
+
+def reload_cards() -> List[str]:
+    """Refresh the in-memory card cache from the configured data source."""
+    new_cards_by_suit = load_cards()
+    _replace_cards_cache(new_cards_by_suit)
+    return sorted(new_cards_by_suit)
 
 
 def _normalize_suit_name(value: str) -> str:
@@ -249,6 +267,20 @@ def draw_cards(suit: SuitQuery = None) -> DrawResponse:
     drawn = {target: _choose_random_card(target) for target in target_suits}
 
     return DrawResponse(cards=drawn)
+
+
+@app.post("/api/cards/reload", response_model=ReloadResponse)
+def reload_cards_endpoint() -> ReloadResponse:
+    """Reload card data from Google Sheets without restarting the app."""
+    try:
+        suits = reload_cards()
+    except (RuntimeError, FileNotFoundError, URLError) as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Unable to reload cards: {exc}",
+        ) from exc
+
+    return ReloadResponse(status="ok", suits=suits)
 
 
 @app.post("/api/games", response_model=GameResponse)

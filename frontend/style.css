@@ -224,6 +224,10 @@ body {
   gap: 0.75rem;
 }
 
+#reload-cards-btn {
+  white-space: nowrap;
+}
+
 .join-form {
   display: flex;
   flex-wrap: wrap;

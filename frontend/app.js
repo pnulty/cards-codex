@@ -6,6 +6,7 @@ const statusBox = document.getElementById("status");
 const cardTemplate = document.getElementById("card-template");
 const modeIndicator = document.getElementById("mode-indicator");
 const startSharedBtn = document.getElementById("start-shared-btn");
+const reloadCardsBtn = document.getElementById("reload-cards-btn");
 const joinGameForm = document.getElementById("join-game-form");
 const joinGameInput = document.getElementById("join-game-input");
 const shareInfo = document.getElementById("share-info");
@@ -275,6 +276,9 @@ const fetchSoloDraw = async (suit) => {
   return fetchJson(url);
 };
 
+const reloadCards = async () =>
+  fetchJson("/api/cards/reload", { method: "POST" });
+
 const updateShareUi = (gameId) => {
   if (!shareInfo || !shareUrlInput || !shareGameId) {
     return;
@@ -420,7 +424,34 @@ const drawAllCards = async () => {
   }
 };
 
+const handleReloadCards = async () => {
+  if (!reloadCardsBtn) {
+    return;
+  }
+
+  reloadCardsBtn.disabled = true;
+  setStatus("Reloading cards from Google Sheets...");
+
+  try {
+    const data = await reloadCards();
+    const suitList = Array.isArray(data.suits) ? data.suits.join(", ") : "";
+    setStatus(
+      `Card source reloaded. New draws will use the updated sheet data${
+        suitList ? ` (${suitList})` : ""
+      }.`
+    );
+  } catch (error) {
+    console.error(error);
+    setStatus(`Unable to reload cards: ${error.message}`, true);
+  } finally {
+    reloadCardsBtn.disabled = false;
+  }
+};
+
 drawAllBtn.addEventListener("click", drawAllCards);
+if (reloadCardsBtn) {
+  reloadCardsBtn.addEventListener("click", handleReloadCards);
+}
 
 if (startSharedBtn) {
   startSharedBtn.addEventListener("click", async () => {
