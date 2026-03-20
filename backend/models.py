@@ -28,4 +28,5 @@ class GameCard(SQLModel, table=True):
     short_text: str
     text: str
     url: Optional[str] = None
+    image_url: Optional[str] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)

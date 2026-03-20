@@ -65,20 +65,49 @@
 
     <template id="card-template">
       <article class="card" tabindex="0">
-        <div class="card-header">
-          <div class="card-suit"></div>
-          <h2 class="card-name"></h2>
-        </div>
-        <p class="card-short"></p>
-        <div class="card-full" hidden></div>
-        <p class="card-url"></p>
-        <div class="card-actions">
-          <button type="button" class="card-toggle secondary" aria-expanded="false">
-            Peel back
-          </button>
-          <button type="button" class="card-redraw secondary">
-            Draw this suit
-          </button>
+        <div class="card-inner">
+          <section class="card-face card-front">
+            <div class="card-header">
+              <div class="card-suit"></div>
+              <h2 class="card-name"></h2>
+            </div>
+            <p class="card-short"></p>
+            <div class="card-full" hidden></div>
+            <p class="card-url"></p>
+            <div class="card-actions">
+              <button
+                type="button"
+                class="card-text-toggle secondary"
+                aria-expanded="false"
+              >
+                Read text
+              </button>
+              <button type="button" class="card-flip-front secondary">
+                Flip to image
+              </button>
+              <button type="button" class="card-redraw-front secondary">
+                Draw this suit
+              </button>
+            </div>
+          </section>
+          <section class="card-face card-back" aria-hidden="true">
+            <div class="card-back-header">
+              <div class="card-suit"></div>
+              <h2 class="card-name"></h2>
+            </div>
+            <div class="card-image-shell">
+              <img class="card-image" alt="" hidden />
+              <p class="card-image-empty" hidden>No image available for this card yet.</p>
+            </div>
+            <div class="card-actions">
+              <button type="button" class="card-flip-back secondary">
+                Return to text
+              </button>
+              <button type="button" class="card-redraw-back secondary">
+                Draw this suit
+              </button>
+            </div>
+          </section>
         </div>
       </article>
     </template>

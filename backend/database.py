@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 from typing import Iterator
 
+from sqlalchemy import inspect, text
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
@@ -39,11 +40,32 @@ def _build_engine() -> Engine:
 engine = _build_engine()
 
 
+def _ensure_game_card_columns() -> None:
+    """Apply lightweight schema updates for existing deployments."""
+    inspector = inspect(engine)
+    if "gamecard" not in inspector.get_table_names():
+        return
+
+    columns = {column["name"] for column in inspector.get_columns("gamecard")}
+    statements: list[str] = []
+
+    if "image_url" not in columns:
+        statements.append("ALTER TABLE gamecard ADD COLUMN image_url VARCHAR")
+
+    if not statements:
+        return
+
+    with engine.begin() as connection:
+        for statement in statements:
+            connection.execute(text(statement))
+
+
 def init_db() -> None:
     """Create database tables if they do not exist."""
     from . import models  # noqa: F401 -- ensures models are registered
 
     SQLModel.metadata.create_all(engine)
+    _ensure_game_card_columns()
 
 
 def get_session() -> Iterator[Session]:

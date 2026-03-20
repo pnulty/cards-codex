@@ -25,7 +25,9 @@ The current sheet is:
 https://docs.google.com/spreadsheets/d/13ZuEqXz3gGgovGVP-714SsFIYh0He_e-jSVIg82A-zU/export?format=csv&gid=0
 ```
 
-The sheet should expose the same headers as `cards.tsv`: `Category2`, `Name`, `Text`, `ShortText`, and `URL`.
+The sheet should expose the same headers as `cards.tsv`: `Category2`, `Name`, `Text`, `ShortText`, `URL`, and optional `ImageURL`.
+
+When `ImageURL` is present, cards can be flipped in the UI to reveal the image.
 
 ## Shared Games
 
@@ -34,6 +36,8 @@ Use shared games when you want multiple people to see the same set of cards:
 1. Click **Start Shared Game**.
 2. Copy the generated `#/game/<id>` link and share it (e.g. in Zoom chat).
 3. Anyone opening that link can redraw suits and everyone will stay in sync.
+
+If you update the Google Sheet while the app is running, use the **Reload Cards** button to refresh the in-memory card data without redeploying.
 
 Shared games are persisted in a small database (`cards.db` via SQLite by default). To use Postgres (for example on Render), set `DATABASE_URL` accordingly (both `postgres://...` and `postgresql://...` are supported; the app uses psycopg v3 under the hood).
 

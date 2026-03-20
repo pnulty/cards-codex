@@ -359,6 +359,42 @@ body {
 }
 
 .card {
+  position: relative;
+  min-height: 25rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  perspective: 1200px;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.card.can-flip:hover .card-inner {
+  transform: translateY(var(--card-hover-translate));
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card.flipped:hover .card-inner {
+  transform: rotateY(180deg) translateY(var(--card-hover-translate));
+}
+
+.card-inner {
+  position: relative;
+  min-height: 25rem;
+  transition: transform 0.45s ease;
+  transform-style: preserve-3d;
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -366,21 +402,36 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease;
   box-shadow: var(--shadow-card);
+  backface-visibility: hidden;
 }
 
-.card:focus-visible {
-  outline: 2px solid var(--accent);
+.card-front,
+.card-back {
+  transition: border-color 0.2s ease;
 }
 
-.card:hover {
+.card:hover .card-front,
+.card:hover .card-back {
   border-color: var(--border-strong);
-  transform: translateY(var(--card-hover-translate));
+}
+
+.card.expanded .card-front,
+.card.flipped .card-back {
+  border-color: var(--accent);
 }
 
 .card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.card-back-header {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -414,14 +465,36 @@ body {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.card.expanded {
-  border-color: var(--accent);
-}
-
 .card.expanded .card-full {
   display: block;
   opacity: 1;
   transform: translateY(0);
+}
+
+.card-image-shell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-lg) - 0.25rem);
+  background: var(--panel-bg);
+  overflow: hidden;
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 14rem;
+  object-fit: cover;
+}
+
+.card-image-empty {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
 }
 
 .card-url {
@@ -441,16 +514,17 @@ body {
 .card-actions {
   margin-top: auto;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: flex-end;
 }
 
-.card-toggle {
+.card-text-toggle {
   border-style: dashed;
   opacity: 0.88;
 }
 
-.card-toggle:disabled {
+.card-text-toggle:disabled {
   opacity: 0.35;
   cursor: not-allowed;
 }
@@ -468,5 +542,10 @@ body {
 
   .card {
     cursor: default;
+  }
+
+  .card,
+  .card-inner {
+    min-height: 22rem;
   }
 }

@@ -59,35 +59,92 @@ const clearCards = () => {
   cardsContainer.replaceChildren();
 };
 
+const updateTextToggleButton = (cardEl, expanded) => {
+  const toggleBtn = cardEl.querySelector(".card-text-toggle");
+  if (!toggleBtn) {
+    return;
+  }
+  toggleBtn.textContent = expanded ? "Hide text" : "Read text";
+  toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+};
+
+const updateFlipButtons = (cardEl, hasImage) => {
+  const frontBtn = cardEl.querySelector(".card-flip-front");
+  const backBtn = cardEl.querySelector(".card-flip-back");
+
+  cardEl.classList.toggle("can-flip", hasImage);
+  if (!hasImage) {
+    cardEl.classList.remove("flipped");
+  }
+
+  if (frontBtn) {
+    frontBtn.disabled = !hasImage;
+    frontBtn.textContent = hasImage ? "Flip to image" : "No image yet";
+  }
+
+  if (backBtn) {
+    backBtn.disabled = !hasImage;
+  }
+};
+
+const setCardImage = (cardEl, imageUrl, name) => {
+  const imageEl = cardEl.querySelector(".card-image");
+  const emptyEl = cardEl.querySelector(".card-image-empty");
+  const hasImage = Boolean(imageUrl);
+
+  if (imageEl) {
+    if (hasImage) {
+      imageEl.src = imageUrl;
+      imageEl.alt = `${name} card image`;
+      imageEl.hidden = false;
+    } else {
+      imageEl.removeAttribute("src");
+      imageEl.alt = "";
+      imageEl.hidden = true;
+    }
+  }
+
+  if (emptyEl) {
+    emptyEl.hidden = hasImage;
+  }
+
+  updateFlipButtons(cardEl, hasImage);
+};
+
 const populateEmptySuit = (suit) => {
   const node = suitNodes.get(suit) ?? createCardNode(suit);
-  const suitEl = node.querySelector(".card-suit");
-  const nameEl = node.querySelector(".card-name");
+  const suitEls = node.querySelectorAll(".card-suit");
+  const nameEls = node.querySelectorAll(".card-name");
   const shortEl = node.querySelector(".card-short");
   const fullEl = node.querySelector(".card-full");
+  const textToggleBtn = node.querySelector(".card-text-toggle");
   const urlEl = node.querySelector(".card-url");
-  const toggleBtn = node.querySelector(".card-toggle");
-  const redrawBtn = node.querySelector(".card-redraw");
+  const redrawBtns = node.querySelectorAll(".card-redraw-front, .card-redraw-back");
 
   node.dataset.suit = suit;
-  node.classList.remove("expanded");
+  node.classList.remove("expanded", "flipped");
 
-  if (suitEl) suitEl.textContent = suit;
-  if (nameEl) nameEl.textContent = "Not drawn yet";
+  suitEls.forEach((element) => {
+    element.textContent = suit;
+  });
+  nameEls.forEach((element) => {
+    element.textContent = "Not drawn yet";
+  });
   if (shortEl) shortEl.textContent = "Use the button below to draw a card.";
   if (fullEl) {
     fullEl.textContent = "";
     fullEl.hidden = true;
   }
-  if (toggleBtn) {
-    toggleBtn.disabled = true;
+  if (textToggleBtn) {
+    textToggleBtn.disabled = true;
   }
+  updateTextToggleButton(node, false);
   if (urlEl) urlEl.textContent = "";
-  if (redrawBtn) {
-    redrawBtn.textContent = `Draw ${suit} card`;
-    redrawBtn.dataset.suit = suit;
-  }
-  updateToggleButton(node, false);
+  redrawBtns.forEach((button) => {
+    button.textContent = `Draw ${suit} card`;
+    button.dataset.suit = suit;
+  });
+  setCardImage(node, null, "Card");
 };
 
 const renderEmptySuits = () => {
@@ -132,23 +189,21 @@ const insertNodeInOrder = (node, suit) => {
   cardsContainer.appendChild(node);
 };
 
-const toggleCard = (cardEl) => {
+const toggleCardText = (cardEl) => {
   const fullTextEl = cardEl.querySelector(".card-full");
   if (!fullTextEl) {
     return;
   }
   const expanded = cardEl.classList.toggle("expanded");
   fullTextEl.hidden = !expanded;
-  updateToggleButton(cardEl, expanded);
+  updateTextToggleButton(cardEl, expanded);
 };
 
-const updateToggleButton = (cardEl, expanded) => {
-  const toggleBtn = cardEl.querySelector(".card-toggle");
-  if (!toggleBtn) {
+const flipCard = (cardEl) => {
+  if (!cardEl.classList.contains("can-flip")) {
     return;
   }
-  toggleBtn.textContent = expanded ? "Fold away" : "Peel back";
-  toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+  cardEl.classList.toggle("flipped");
 };
 
 const createToggleHandler = (node) => (event) => {
@@ -164,7 +219,7 @@ const createToggleHandler = (node) => (event) => {
     event.preventDefault();
   }
 
-  toggleCard(node);
+  flipCard(node);
 };
 
 const createCardNode = (suit) => {
@@ -175,22 +230,34 @@ const createCardNode = (suit) => {
   node.addEventListener("click", handleToggle);
   node.addEventListener("keydown", handleToggle);
 
-  const toggleBtn = node.querySelector(".card-toggle");
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", (event) => {
+  const textToggleBtn = node.querySelector(".card-text-toggle");
+  if (textToggleBtn) {
+    textToggleBtn.addEventListener("click", (event) => {
       event.stopPropagation();
-      toggleCard(node);
+      toggleCardText(node);
     });
   }
 
-  const redrawBtn = node.querySelector(".card-redraw");
-  if (redrawBtn) {
+  const flipFrontBtn = node.querySelector(".card-flip-front");
+  const flipBackBtn = node.querySelector(".card-flip-back");
+  [flipFrontBtn, flipBackBtn].forEach((button) => {
+    if (!button) {
+      return;
+    }
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      flipCard(node);
+    });
+  });
+
+  const redrawButtons = node.querySelectorAll(".card-redraw-front, .card-redraw-back");
+  redrawButtons.forEach((redrawBtn) => {
     redrawBtn.addEventListener("click", (event) => {
       event.stopPropagation();
       const targetSuit = redrawBtn.dataset.suit || suit;
       drawSingleSuit(targetSuit);
     });
-  }
+  });
 
   insertNodeInOrder(node, suit);
   suitNodes.set(suit, node);
@@ -217,33 +284,38 @@ const updateUrlElement = (urlEl, url) => {
 const populateCardContent = (suit, card) => {
   const node = suitNodes.get(suit) ?? createCardNode(suit);
   const isExpanded = node.classList.contains("expanded");
-  const suitEl = node.querySelector(".card-suit");
-  const nameEl = node.querySelector(".card-name");
+  const suitEls = node.querySelectorAll(".card-suit");
+  const nameEls = node.querySelectorAll(".card-name");
   const shortEl = node.querySelector(".card-short");
   const fullEl = node.querySelector(".card-full");
+  const textToggleBtn = node.querySelector(".card-text-toggle");
   const urlEl = node.querySelector(".card-url");
-  const toggleBtn = node.querySelector(".card-toggle");
-  const redrawBtn = node.querySelector(".card-redraw");
+  const redrawBtns = node.querySelectorAll(".card-redraw-front, .card-redraw-back");
 
   node.dataset.suit = suit;
 
-  if (suitEl) suitEl.textContent = suit;
-  if (nameEl) nameEl.textContent = card.name;
+  suitEls.forEach((element) => {
+    element.textContent = suit;
+  });
+  nameEls.forEach((element) => {
+    element.textContent = card.name;
+  });
   if (shortEl) shortEl.textContent = card.short_text;
   if (fullEl) {
     fullEl.textContent = card.text;
     fullEl.hidden = !isExpanded;
   }
-  if (toggleBtn) {
-    toggleBtn.disabled = false;
+  if (textToggleBtn) {
+    textToggleBtn.disabled = false;
   }
-  updateToggleButton(node, isExpanded);
+  updateTextToggleButton(node, isExpanded);
   updateUrlElement(urlEl, card.url);
+  setCardImage(node, card.image_url, card.name);
 
-  if (redrawBtn) {
-    redrawBtn.textContent = `Draw ${suit} card`;
-    redrawBtn.dataset.suit = suit;
-  }
+  redrawBtns.forEach((button) => {
+    button.textContent = `Draw ${suit} card`;
+    button.dataset.suit = suit;
+  });
 
 };
 
@@ -375,14 +447,16 @@ const drawSingleSuit = async (suit) => {
   }
 
   const node = suitNodes.get(suit) ?? createCardNode(suit);
-  const redrawBtn = node.querySelector(".card-redraw");
-  if (!redrawBtn) {
+  const redrawButtons = node.querySelectorAll(".card-redraw-front, .card-redraw-back");
+  if (!redrawButtons.length) {
     return;
   }
 
-  const previousLabel = redrawBtn.textContent;
-  redrawBtn.disabled = true;
-  redrawBtn.textContent = "Drawing...";
+  const previousLabels = Array.from(redrawButtons, (button) => button.textContent);
+  redrawButtons.forEach((button) => {
+    button.disabled = true;
+    button.textContent = "Drawing...";
+  });
   setStatus(`Drawing ${suit} card...${activeGameId ? " (shared)" : ""}`);
 
   try {
@@ -399,8 +473,10 @@ const drawSingleSuit = async (suit) => {
     console.error(error);
     setStatus(`Unable to draw ${suit} card: ${error.message}`, true);
   } finally {
-    redrawBtn.disabled = false;
-    redrawBtn.textContent = previousLabel;
+    redrawButtons.forEach((button, index) => {
+      button.disabled = false;
+      button.textContent = previousLabels[index];
+    });
   }
 };
 

@@ -38,6 +38,7 @@ class Card(BaseModel):
     short_text: str
     text: str
     url: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class DrawResponse(BaseModel):
@@ -94,6 +95,7 @@ def load_cards() -> Dict[str, List[Card]]:
         text = row.get("Text", "").strip()
         short_text = row.get("ShortText", "").strip()
         url = row.get("URL", "").strip() or None
+        image_url = row.get("ImageURL", "").strip() or None
 
         if not suit or not name or not text:
             continue
@@ -105,6 +107,7 @@ def load_cards() -> Dict[str, List[Card]]:
             text=text,
             short_text=_build_short_text(text, short_text),
             url=url,
+            image_url=image_url,
         )
         suits.setdefault(suit, []).append(card)
 
@@ -185,6 +188,7 @@ def _rows_to_cards(rows: Iterable[GameCard]) -> Dict[str, Card]:
             short_text=row.short_text,
             text=row.text,
             url=row.url,
+            image_url=row.image_url,
         )
     return cards
 
@@ -215,6 +219,7 @@ def _update_game_cards(session: Session, game: Game, suits: List[str]) -> Dict[s
             existing.short_text = card.short_text
             existing.text = card.text
             existing.url = card.url
+            existing.image_url = card.image_url
             existing.updated_at = now
         else:
             new_rows.append(
@@ -226,6 +231,7 @@ def _update_game_cards(session: Session, game: Game, suits: List[str]) -> Dict[s
                     short_text=card.short_text,
                     text=card.text,
                     url=card.url,
+                    image_url=card.image_url,
                     updated_at=now,
                 )
             )
