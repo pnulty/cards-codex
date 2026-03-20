@@ -1,0 +1,37 @@
+CardID,Category2,Name,SlideNumber,SourceMedia,ImageURL
+,Workshop,History and Genre,3,image2.jpg,/assets/images/cards/workshop-history-and-genre.jpg
+,Platform,The Exchange,5,image3.jpg,/assets/images/cards/platform-the-exchange.jpg
+,Touchstone,Past and Present,7,image4.jpg,/assets/images/cards/touchstone-past-and-present.jpg
+,Touchstone,Connectivities,9,image5.jpg,/assets/images/cards/touchstone-connectivities.jpg
+,Touchstone,Mediating Technologies,11,image6.png,/assets/images/cards/touchstone-mediating-technologies.png
+,Protocol,Stuckness,13,image7.jpg,/assets/images/cards/protocol-stuckness.jpg
+,Protocol,Mediation,15,image8.jpg,/assets/images/cards/protocol-mediation.jpg
+,Protocol,Protocol,17,image9.png,/assets/images/cards/protocol-protocol.png
+,Protocol,Platform,19,image10.jpg,/assets/images/cards/protocol-platform.jpg
+,Protocol,Fiction,21,image11.jpg,/assets/images/cards/protocol-fiction.jpg
+,Protocol,Better Explanation,23,image12.png,/assets/images/cards/protocol-better-explanation.png
+,Workshop,Heterochrony,27,image14.jpg,/assets/images/cards/workshop-heterochrony.jpg
+,Workshop,Breaking Boundaries,29,image15.jpg,/assets/images/cards/workshop-breaking-boundaries.jpg
+,Workshop,Dedisciplinarity,31,image16.jpg,/assets/images/cards/workshop-dedisciplinarity.jpg
+,Workshop,The Universal Library,33,image17.jpg,/assets/images/cards/workshop-the-universal-library.jpg
+,Workshop,Trust,35,image18.jpg,/assets/images/cards/workshop-trust.jpg
+,Platform,Table,37,image19.jpg,/assets/images/cards/platform-table.jpg
+,Workshop,Visualization,39,image20.jpg,/assets/images/cards/workshop-visualization.jpg
+,Workshop,Simulation,41,image21.jpg,/assets/images/cards/workshop-simulation.jpg
+,Workshop,Thought Experiment,43,image22.jpg,/assets/images/cards/workshop-thought-experiment.jpg
+,Platform,Interface,45,image23.jpg,/assets/images/cards/platform-interface.jpg
+,Platform,Program,47,image24.jpg,/assets/images/cards/platform-program.jpg
+,Platform,Network,49,image25.jpg,/assets/images/cards/platform-network.jpg
+,Tool,Frame 2,51,image26.jpg,/assets/images/cards/tool-frame-2.jpg
+,Tool,Connectivity,53,image27.jpg,/assets/images/cards/tool-connectivity.jpg
+,Tool,Complete Knowledge,55,image28.jpg,/assets/images/cards/tool-complete-knowledge.jpg
+,Tool,Frame 1,57,image29.jpg,/assets/images/cards/tool-frame-1.jpg
+,Tool,"When in Doubt, Scale!",59,image30.jpg,/assets/images/cards/tool-when-in-doubt-scale.jpg
+,Tool,Wandering,61,image31.jpg,/assets/images/cards/tool-wandering.jpg
+,Tool,Zone,63,image32.jpg,/assets/images/cards/tool-zone.jpg
+,Tool,Writing,65,image33.jpg,/assets/images/cards/tool-writing.jpg
+,Protocol,RE:,67,image34.jpg,/assets/images/cards/protocol-re.jpg
+,Touchstone,The Specific,69,image35.jpg,/assets/images/cards/touchstone-the-specific.jpg
+,Workshop,The Abstract,71,image36.jpg,/assets/images/cards/workshop-the-abstract.jpg
+,Workshop,Embodiment,73,image37.jpg,/assets/images/cards/workshop-embodiment.jpg
+,Workshop,Unity,75,image38.jpg,/assets/images/cards/workshop-unity.jpg

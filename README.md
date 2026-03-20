@@ -25,7 +25,9 @@ The current sheet is:
 https://docs.google.com/spreadsheets/d/13ZuEqXz3gGgovGVP-714SsFIYh0He_e-jSVIg82A-zU/export?format=csv&gid=0
 ```
 
-The sheet should expose the same headers as `cards.tsv`: `Category2`, `Name`, `Text`, `ShortText`, `URL`, and optional `ImageURL`.
+The sheet should expose the same headers as `cards.tsv`: `Category2`, `Name`, `Text`, `ShortText`, `URL`, and optional `CardID` and `ImageURL`.
+
+Use `CardID` for a stable per-card identifier. If it is missing, the app falls back to a generated ID based on suit and name.
 
 When `ImageURL` is present, cards can be flipped in the UI to reveal the image.
 

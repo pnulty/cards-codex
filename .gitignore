@@ -4,6 +4,7 @@
 .deps/
 __pycache__/
 *.pyc
+.~lock.*
 
 # Ignore deck export assets
 Final card deck edited proof.pdf

@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import io
 import random
+import re
 from contextlib import closing
 from datetime import datetime
 from pathlib import Path
@@ -68,6 +69,17 @@ def _build_short_text(text: str, short_text: Optional[str], limit: int = 190) ->
     return f"{truncated}..."
 
 
+def _build_card_id(
+    row: dict[str, str], idx: int, suit: str, name: str
+) -> str:
+    """Return a stable card identifier when the source provides one."""
+    card_id = row.get("CardID", "").strip()
+    if card_id:
+        return card_id
+    fallback = re.sub(r"[^a-z0-9]+", "-", f"{suit}-{name}".lower()).strip("-")
+    return fallback or f"card-{idx}"
+
+
 def _iter_card_rows() -> Iterable[dict[str, str]]:
     """Yield card rows from Google Sheets, falling back to the local TSV file."""
     try:
@@ -101,7 +113,7 @@ def load_cards() -> Dict[str, List[Card]]:
             continue
 
         card = Card(
-            id=str(idx),
+            id=_build_card_id(row, idx, suit, name),
             suit=suit,
             name=name,
             text=text,
