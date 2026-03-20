@@ -64,7 +64,7 @@ const updateTextToggleButton = (cardEl, expanded) => {
   if (!toggleBtn) {
     return;
   }
-  toggleBtn.textContent = expanded ? "Hide text" : "Read text";
+  toggleBtn.textContent = expanded ? "Fold away" : "Peel back";
   toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
 };
 

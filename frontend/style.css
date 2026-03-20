@@ -404,6 +404,7 @@ body {
   gap: 0.75rem;
   box-shadow: var(--shadow-card);
   backface-visibility: hidden;
+  overflow: hidden;
 }
 
 .card-front,
@@ -469,6 +470,10 @@ body {
   display: block;
   opacity: 1;
   transform: translateY(0);
+}
+
+.card-front {
+  overflow-y: auto;
 }
 
 .card-image-shell {
