@@ -43,6 +43,8 @@ Use shared games when you want multiple people to see the same set of cards:
 
 If you update the Google Sheet while the app is running, use the **Reload Cards** button to refresh the in-memory card data without redeploying.
 
+A separate mobile-only route is available at `/breakout`. It has no shared state, lets a user choose one suit, draw one card independently, and attempts to keep the screen awake using the browser wake lock API.
+
 Shared games are persisted in a small database (`cards.db` via SQLite by default). To use Postgres (for example on Render), set `DATABASE_URL` accordingly (both `postgres://...` and `postgresql://...` are supported; the app uses psycopg v3 under the hood).
 
 ## Deploying on Render

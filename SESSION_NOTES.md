@@ -49,6 +49,14 @@
   - `Final card deck edited proof pictures.pptx`
 - It is intentionally ignored by git and not committed
 
+## Mobile Variant
+
+- Simplified mobile-only page is served at `/breakout`
+- No shared state or saved group state
+- User chooses one suit and draws one card independently
+- Page attempts `navigator.wakeLock.request('screen')` when supported
+- Uses `/api/suits` plus existing `/api/draw?suit=...`
+
 ## UI State
 
 - Cards support:

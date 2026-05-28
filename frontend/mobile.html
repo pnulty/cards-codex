@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Re:Enlightenment Mobile Cards</title>
+    <link rel="stylesheet" href="/assets/mobile.css" />
+  </head>
+  <body>
+    <main class="mobile-app">
+      <section class="mobile-shell mobile-shell-chooser" id="chooser-screen">
+        <div class="mobile-heading">
+          <p class="mobile-kicker">Re:Enlightenment breakout cards</p>
+          <h1>Choose a suit, then draw one card.</h1>
+          <p class="mobile-copy">Each phone draws independently. Put the phone down like a physical card when you have one you want to keep on the table.</p>
+        </div>
+        <section class="wake-panel" id="wake-panel" hidden>
+          <p id="wake-status">Requesting screen wake lock…</p>
+        </section>
+        <section>
+          <h2 class="mobile-section-title">Suits</h2>
+          <div class="suit-grid" id="suit-grid"></div>
+        </section>
+      </section>
+
+      <section class="mobile-shell mobile-shell-card" id="card-screen" hidden>
+        <header class="card-toolbar">
+          <button type="button" class="pill-button ghost-button" id="back-to-suits-btn">Change suit</button>
+          <button type="button" class="pill-button" id="redraw-btn">Draw again</button>
+        </header>
+
+        <article class="mobile-card" id="mobile-card" tabindex="0" aria-live="polite">
+          <div class="mobile-card-inner">
+            <section class="mobile-card-face mobile-card-front">
+              <div class="mobile-card-header">
+                <p class="mobile-card-suit" id="card-suit"></p>
+                <h2 class="mobile-card-name" id="card-name"></h2>
+              </div>
+              <p class="mobile-card-short" id="card-short"></p>
+              <p class="mobile-card-text" id="card-text"></p>
+              <p class="mobile-hint" id="front-hint">Tap card to flip.</p>
+            </section>
+
+            <section class="mobile-card-face mobile-card-back">
+              <div class="mobile-card-header">
+                <p class="mobile-card-suit" id="back-card-suit"></p>
+                <h2 class="mobile-card-name" id="back-card-name"></h2>
+              </div>
+              <div class="mobile-image-shell">
+                <img id="card-image" class="mobile-card-image" alt="" hidden />
+                <p id="image-empty" class="mobile-image-empty" hidden>No image is available for this card.</p>
+              </div>
+              <p class="mobile-hint" id="back-hint">Tap card to return.</p>
+            </section>
+          </div>
+        </article>
+
+        <footer class="mobile-footer">
+          <p class="mobile-footer-line" id="card-status"></p>
+        </footer>
+      </section>
+    </main>
+
+    <template id="suit-button-template">
+      <button type="button" class="suit-button"></button>
+    </template>
+
+    <script type="module" src="/assets/mobile.js"></script>
+  </body>
+</html>

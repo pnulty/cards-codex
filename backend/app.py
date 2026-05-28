@@ -56,6 +56,10 @@ class ReloadResponse(BaseModel):
     suits: List[str]
 
 
+class SuitsResponse(BaseModel):
+    suits: List[str]
+
+
 def _build_short_text(text: str, short_text: Optional[str], limit: int = 190) -> str:
     """Return a short summary, preferring the provided ShortText field."""
     if short_text:
@@ -301,6 +305,12 @@ def reload_cards_endpoint() -> ReloadResponse:
     return ReloadResponse(status="ok", suits=suits)
 
 
+@app.get("/api/suits", response_model=SuitsResponse)
+def list_suits() -> SuitsResponse:
+    """Return the available suit names in display order."""
+    return SuitsResponse(suits=list(cards_by_suit.keys()))
+
+
 @app.post("/api/games", response_model=GameResponse)
 def create_game(session: Session = Depends(get_session)) -> GameResponse:
     """Create a new shared game."""
@@ -342,6 +352,15 @@ def serve_frontend() -> FileResponse:
     if not index_file.exists():
         raise HTTPException(status_code=404, detail="Frontend build is missing")
     return FileResponse(index_file)
+
+
+@app.get("/breakout")
+def serve_mobile_frontend() -> FileResponse:
+    """Serve the simplified mobile-first card drawing page."""
+    mobile_file = FRONTEND_DIR / "mobile.html"
+    if not mobile_file.exists():
+        raise HTTPException(status_code=404, detail="Mobile frontend is missing")
+    return FileResponse(mobile_file)
 
 
 if FRONTEND_DIR.exists():
