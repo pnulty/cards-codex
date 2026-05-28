@@ -8,21 +8,14 @@
   </head>
   <body>
     <main class="mobile-app">
-      <section class="mobile-shell mobile-shell-chooser" id="chooser-screen">
+      <section class="mobile-shell">
         <div class="chooser-controls">
           <label class="sr-only" for="suit-select">Suit</label>
           <select id="suit-select" class="suit-select" aria-label="Choose suit"></select>
           <button type="button" class="pill-button draw-button" id="draw-suit-btn">Draw card</button>
         </div>
-      </section>
 
-      <section class="mobile-shell mobile-shell-card" id="card-screen" hidden>
-        <header class="card-toolbar">
-          <button type="button" class="pill-button ghost-button" id="back-to-suits-btn">Suit</button>
-          <button type="button" class="pill-button" id="redraw-btn">Draw again</button>
-        </header>
-
-        <article class="mobile-card" id="mobile-card" tabindex="0" aria-live="polite">
+        <article class="mobile-card" id="mobile-card" tabindex="0" aria-live="polite" hidden>
           <div class="mobile-card-inner">
             <section class="mobile-card-face mobile-card-front">
               <div class="mobile-card-header">

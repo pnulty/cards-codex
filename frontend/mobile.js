@@ -1,10 +1,6 @@
-const chooserScreen = document.getElementById("chooser-screen");
-const cardScreen = document.getElementById("card-screen");
 const suitSelect = document.getElementById("suit-select");
 const drawSuitBtn = document.getElementById("draw-suit-btn");
 const mobileCard = document.getElementById("mobile-card");
-const backToSuitsBtn = document.getElementById("back-to-suits-btn");
-const redrawBtn = document.getElementById("redraw-btn");
 
 const suitEl = document.getElementById("card-suit");
 const nameEl = document.getElementById("card-name");
@@ -94,15 +90,14 @@ const showCard = (card) => {
   backSuitEl.textContent = card.suit;
   backNameEl.textContent = card.name;
   setCardImage(card);
-
-  chooserScreen.hidden = true;
-  cardScreen.hidden = false;
+  mobileCard.hidden = false;
+  requestAnimationFrame(() => {
+    mobileCard.scrollIntoView({ block: "start", behavior: "smooth" });
+  });
 };
 
 const drawSuit = async (suit) => {
   drawSuitBtn.disabled = true;
-  redrawBtn.disabled = true;
-  backToSuitsBtn.disabled = true;
 
   try {
     const data = await fetchJson(`/api/draw?${new URLSearchParams({ suit }).toString()}`);
@@ -115,8 +110,6 @@ const drawSuit = async (suit) => {
     console.error(error);
   } finally {
     drawSuitBtn.disabled = false;
-    redrawBtn.disabled = false;
-    backToSuitsBtn.disabled = false;
   }
 };
 
@@ -153,19 +146,6 @@ suitSelect.addEventListener("change", () => {
 });
 
 drawSuitBtn.addEventListener("click", () => {
-  if (!activeSuit) {
-    return;
-  }
-  drawSuit(activeSuit);
-});
-
-backToSuitsBtn.addEventListener("click", () => {
-  chooserScreen.hidden = false;
-  cardScreen.hidden = true;
-  mobileCard.classList.remove("flipped");
-});
-
-redrawBtn.addEventListener("click", () => {
   if (!activeSuit) {
     return;
   }
