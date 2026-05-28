@@ -1,15 +1,10 @@
-const suitGrid = document.getElementById("suit-grid");
-const suitButtonTemplate = document.getElementById("suit-button-template");
 const chooserScreen = document.getElementById("chooser-screen");
 const cardScreen = document.getElementById("card-screen");
+const suitSelect = document.getElementById("suit-select");
+const drawSuitBtn = document.getElementById("draw-suit-btn");
 const mobileCard = document.getElementById("mobile-card");
 const backToSuitsBtn = document.getElementById("back-to-suits-btn");
 const redrawBtn = document.getElementById("redraw-btn");
-const wakePanel = document.getElementById("wake-panel");
-const wakeStatus = document.getElementById("wake-status");
-const frontHint = document.getElementById("front-hint");
-const backHint = document.getElementById("back-hint");
-const cardStatus = document.getElementById("card-status");
 
 const suitEl = document.getElementById("card-suit");
 const nameEl = document.getElementById("card-name");
@@ -33,37 +28,18 @@ const fetchJson = async (url, options) => {
   return response.json();
 };
 
-const setStatus = (message, isError = false) => {
-  cardStatus.textContent = message;
-  cardStatus.classList.toggle("error", isError);
-};
-
-const setWakeStatus = (message, isError = false) => {
-  if (!wakePanel || !wakeStatus) {
-    return;
-  }
-  wakePanel.hidden = false;
-  wakeStatus.textContent = message;
-  wakePanel.classList.toggle("error", isError);
-};
-
 const requestWakeLock = async () => {
   if (!("wakeLock" in navigator) || !navigator.wakeLock?.request) {
-    setWakeStatus("This browser does not support screen wake lock.", true);
     return;
   }
 
   try {
     wakeLock = await navigator.wakeLock.request("screen");
-    setWakeStatus("Screen wake lock is active.");
     wakeLock.addEventListener("release", () => {
-      if (document.visibilityState === "visible") {
-        setWakeStatus("Screen wake lock was released.", true);
-      }
+      wakeLock = null;
     });
   } catch (error) {
     console.error(error);
-    setWakeStatus("Unable to keep the screen awake on this device.", true);
   }
 };
 
@@ -77,18 +53,19 @@ const ensureWakeLock = async () => {
   await requestWakeLock();
 };
 
-const renderSuitButtons = () => {
-  suitGrid.replaceChildren();
+const renderSuits = () => {
+  suitSelect.replaceChildren();
   suits.forEach((suit) => {
-    const button = suitButtonTemplate.content.firstElementChild.cloneNode(true);
-    button.textContent = suit;
-    button.dataset.suit = suit;
-    button.addEventListener("click", () => {
-      activeSuit = suit;
-      drawSuit(suit);
-    });
-    suitGrid.appendChild(button);
+    const option = document.createElement("option");
+    option.value = suit;
+    option.textContent = suit;
+    suitSelect.appendChild(option);
   });
+
+  activeSuit = suits[0] || null;
+  if (activeSuit) {
+    suitSelect.value = activeSuit;
+  }
 };
 
 const setCardImage = (card) => {
@@ -101,15 +78,11 @@ const setCardImage = (card) => {
     imageEl.alt = `${card.name} card image`;
     imageEl.hidden = false;
     imageEmptyEl.hidden = true;
-    frontHint.hidden = false;
-    backHint.hidden = false;
   } else {
     imageEl.removeAttribute("src");
     imageEl.alt = "";
     imageEl.hidden = true;
     imageEmptyEl.hidden = false;
-    frontHint.hidden = true;
-    backHint.hidden = true;
   }
 };
 
@@ -124,13 +97,12 @@ const showCard = (card) => {
 
   chooserScreen.hidden = true;
   cardScreen.hidden = false;
-  setStatus(`Showing ${card.suit}: ${card.name}.`);
 };
 
 const drawSuit = async (suit) => {
+  drawSuitBtn.disabled = true;
   redrawBtn.disabled = true;
   backToSuitsBtn.disabled = true;
-  setStatus(`Drawing a ${suit} card...`);
 
   try {
     const data = await fetchJson(`/api/draw?${new URLSearchParams({ suit }).toString()}`);
@@ -141,8 +113,8 @@ const drawSuit = async (suit) => {
     showCard(card);
   } catch (error) {
     console.error(error);
-    setStatus(`Unable to draw card: ${error.message}`, true);
   } finally {
+    drawSuitBtn.disabled = false;
     redrawBtn.disabled = false;
     backToSuitsBtn.disabled = false;
   }
@@ -155,10 +127,9 @@ const loadSuits = async () => {
     if (!suits.length) {
       throw new Error("No suits are available.");
     }
-    renderSuitButtons();
+    renderSuits();
   } catch (error) {
     console.error(error);
-    setStatus(`Unable to load suits: ${error.message}`, true);
   }
 };
 
@@ -177,11 +148,21 @@ mobileCard.addEventListener("keydown", (event) => {
   mobileCard.classList.toggle("flipped");
 });
 
+suitSelect.addEventListener("change", () => {
+  activeSuit = suitSelect.value;
+});
+
+drawSuitBtn.addEventListener("click", () => {
+  if (!activeSuit) {
+    return;
+  }
+  drawSuit(activeSuit);
+});
+
 backToSuitsBtn.addEventListener("click", () => {
   chooserScreen.hidden = false;
   cardScreen.hidden = true;
   mobileCard.classList.remove("flipped");
-  setStatus("");
 });
 
 redrawBtn.addEventListener("click", () => {
